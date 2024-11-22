@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Manager</title>
+    <style>
+        .container { display: flex; }
+        .form-section { width: 40%; padding-right: 20px; }
+        .list-section { width: 60%; }
+        .contact-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Contact Manager</h1>
+    <div class="container">
+        <!-- Left side: Add Contact Form -->
+        <div class="form-section">
+            <h2>Add Contact</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <label for="email_notification">Send contact details to (Email):</label>
+                <input type="email" name="email_notification" id="email_notification">
+                <button type="submit">Add Contact</button>
+            </form>
+        </div>
+
+        <!-- Right side: Contact List with Delete Button -->
+        <div class="list-section">
+            <h2>Contacts</h2>
+            {% for contact in contacts %}
+                <div class="contact-item">
+                    <div>
+                        <strong>{{ contact.name }}</strong><br>
+                        {{ contact.email }} | {{ contact.phone_number }} | {{ contact.address }}
+                    </div>
+                    <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="contact_id" value="{{ contact.id }}">
+                        <button type="submit" name="delete">Delete</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
